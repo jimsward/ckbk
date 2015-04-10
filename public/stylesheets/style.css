@@ -1,0 +1,60 @@
+body { background-color:#fff; font:Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif }
+
+.container { width : 1000px; margin:auto; margin-top:200px; margin-bottom:100px
+ }
+
+table { width:1000px; border-collapse: collapse; }
+
+/*.tbl { margin:auto; margin-top:200px}*/
+
+/* Extra selectors needed to override the default styling */
+table.tablesorter tbody tr.normal-row td {
+  background: #888;
+  color: #fff;
+}
+table.tablesorter tbody tr.alt-row td {
+  background: #000;
+  color: #fff;
+}
+
+.tbody { position : relative; }
+
+th { background-color:#bebebe }
+
+div.editable, div.not-editable { width : 150px; height: 24px }
+
+input { color:#000000}
+
+input[placeholder] {color : #000000;}
+
+input#datepicker.hasDatepicker { width : 120px; }
+
+input[type="text"] { width : 123px; height : 24px; padding:0; border:1px #999 solid }
+
+input#submit, button.submit, input.submit, input.cancel { width:106px; height:36px; margin:4px  }
+
+button.submit { margin : 4px; }
+
+button.reset { right : 4px; }
+
+#ui-datepicker-div { background-color:#FFFFFF; }
+
+form { height:84px;width:1000px; background-color:#ddd; border: 0;}
+
+td.rtalign {  text-align:right; }
+
+select#reference { width : 113px; height:26px; border: gray solid 1px; background-color : transparent }
+
+input#datepicker.hasDatepicker { width : 80px; margin-left:2px; padding-left:4px; margin-right:2px }
+
+
+
+dvi#ui-datepicker-div { width:150px; height:122px }
+
+input.cancel { display : block; float:right ; width:106px; height:36px; margin:4px }
+
+#editRow {background-color:red}
+
+button#save { opacity :0.5; }
+
+.buttons { width:460px; }
