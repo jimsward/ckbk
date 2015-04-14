@@ -41,7 +41,7 @@ function SessionsDAO(db) {
     }
     this.getUsername = function(session_id, callback) {
 		
-		console.log(session_id)
+		
 
         "use strict";
 

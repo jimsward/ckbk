@@ -17,7 +17,7 @@ function SessionHandler (db) {
             if (!err && username) {
                 req.username = username;
             }
-			console.log(req.username)
+			
             return next();
         });
     }

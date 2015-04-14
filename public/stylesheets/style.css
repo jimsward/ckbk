@@ -1,11 +1,8 @@
 body { background-color:#fff; font:Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif }
 
-.container { width : 1000px; margin:auto; margin-top:200px; margin-bottom:100px
- }
+.container { width : 1000px; margin:auto;  margin-bottom:100px }
 
 table { width:1000px; border-collapse: collapse; }
-
-/*.tbl { margin:auto; margin-top:200px}*/
 
 /* Extra selectors needed to override the default styling */
 table.tablesorter tbody tr.normal-row td {
@@ -39,7 +36,7 @@ button.reset { right : 4px; }
 
 #ui-datepicker-div { background-color:#FFFFFF; }
 
-form { height:84px;width:1000px; background-color:#ddd; border: 0;}
+form#entryform { height:84px;width:1000px; background-color:#ddd; border: 0;}
 
 td.rtalign {  text-align:right; }
 
@@ -47,6 +44,8 @@ select#reference { width : 113px; height:26px; border: gray solid 1px; backgroun
 
 input#datepicker.hasDatepicker { width : 80px; margin-left:2px; padding-left:4px; margin-right:2px }
 
+
+input#editdeposit, input#editpayment { width : 66px }
 
 
 dvi#ui-datepicker-div { width:150px; height:122px }
@@ -58,3 +57,11 @@ input.cancel { display : block; float:right ; width:106px; height:36px; margin:4
 button#save { opacity :0.5; }
 
 .buttons { width:460px; }
+
+#search-register { width : 220px; height : 42px; float:right; font-size:14px; margin: 0 0 40px 0 }
+
+fieldset label, fieldset input { display : block; }
+
+button.ui-datepicker-trigger { display:inline }
+
+div#findbtn { float:right }

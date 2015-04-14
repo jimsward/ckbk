@@ -91,9 +91,7 @@ jQuery(function(){
       buttonImageOnly: true,
       buttonText: "Select date",
 	  dateFormat: "m/d/yy"
-	 // onClose: function() {
-     //   $('#date').valid();}
-    }  );
+	   }  );
 	$( '#datepicker' ).attr( 'value', today )
 	
 	$("#datepicker").blur(function(){
@@ -115,8 +113,8 @@ jQuery(function(){
     
     widgets: ["uitheme", "zebra", "print"],
     widgetOptions : {
-      zebra : [ "normal-row", "alt-row" ]
-	  
+      zebra : [ "normal-row", "alt-row" ],
+	  theme : "blue"
     }
   } )
 	
@@ -253,5 +251,85 @@ jQuery(function(){
  		  		});//ajax  
 		})				
 		
-	})			
+	})	
+	
+	
+	var dialog, form;
+	
+	    dialog = $( "#dialog-form" ).dialog({
+      autoOpen: false,
+      height: 600,
+      width: 1040,
+      modal: true,
+      buttons: {  //button label : callback
+        Find: form2,
+        Cancel: function() {
+          dialog.dialog( "close" );
+        }
+      },
+      close: function() {
+		  $(this).dialog( "close" )
+        //document.getElementById("#dialogForm").reset();
+        //allFields.removeClass( "ui-state-error" );
+		
+      }
+    });//dialog
+	
+	
+ 
+   function form2()
+   {
+    
+     console.log( 'search logic goes here' );
+	 
+	 var data = {};
+	 
+		data.date = $( "input[id|='datepicker2']" ).val()
+		alert(data.date)
+		$.ajax(
+		{
+		url : '/find',
+		method : "GET",
+		data : data
+		})
+	
+		.fail(function( jqXHR, textStatus, errorThrown ) {
+					alert(errorThrown)
+					})
+		  		.always(function( msg ) {
+					$( '#dialogForm' )[0].reset()
+			  	alert( msg)
+				})
+	
+	  
+	
+   }
+ 
+    $( "#search-register" ).button().on( "click", function() {
+      dialog.dialog( "open" );
+    });
+	
+	$( "#datepicker2" ).datepicker( {
+      showOn: "button",
+      //buttonImage: "images/calendar.gif",
+	  showButtonPanel: true,
+     // buttonImageOnly: true,
+      buttonText: "Select date",
+	  dateFormat: "m/d/yy"
+	   }  );
+	   
+	   $("input#datepicker2").on('blur', function(){
+        var val = $(this).val();
+        var val1 = Date.parse(val);
+		    if (isNaN(val1)==true){
+			//$(this).val(today)
+           alert("Please enter a valid date!")
+        }
+        else{
+           console.log(val1);
+        }
+    });
+
+	
+			
 })

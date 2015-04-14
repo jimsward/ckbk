@@ -154,6 +154,19 @@ function ContentHandler (app, db) {
 			
 			})
 		
+	}
+	
+	
+	this.findRow = function( req, res, next )
+	{
+		
+		console.log(req.query)
+		var obj = req.query
+		entries.findEntries(obj, function(err, results)
+		{
+			console.log(results)
+			return res.send(results)
+			})
 		}
 	
 

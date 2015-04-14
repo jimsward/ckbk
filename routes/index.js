@@ -20,6 +20,7 @@ app.get('/', contentHandler.displayMainPage);
 app.post('/newentry', contentHandler.handleNewEntry);
 app.post('/edit', contentHandler.editRow)
 app.delete('/delete', contentHandler.deleteRow)
+app.get( '/find', contentHandler.findRow )
 app.get('/customers', sessionHandler.displayCustomersPage);
 console.log("HERE")
 

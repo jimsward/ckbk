@@ -84,6 +84,14 @@ function EntriesDAO(db) {
 			callback(err, doc)		
 			})
 		}
+		
+		
+		this.findEntries =  function(obj, callback){
+			var dt = obj.date
+			console.log(dt)
+			callback(null, dt) 
+		
+		}
 
    
 }
