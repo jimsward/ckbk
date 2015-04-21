@@ -1,5 +1,6 @@
  var qs = require('querystring');
 var EntriesDAO = require('../entries').EntriesDAO
+var AccountsDAO = require('../accounts').AccountsDAO
   //, sanitize = require('validator').sanitize; // Helper to sanitize form input
 
 /* The ContentHandler must be constructed with a connected db */
@@ -7,6 +8,7 @@ function ContentHandler (app, db) {
     "use strict";
 	var displArr
     var entries = new EntriesDAO(db);
+	var accounts = new AccountsDAO(db);
 	
 	var toDecimal = function(number)//returns a string with the (integer) number divided by 100 
 	{		
@@ -168,9 +170,20 @@ function ContentHandler (app, db) {
 			return res.send(results)
 			})
 		}
+
+
+	this.listAccounts = function( req, res, next )
+	{
+		accounts.getList( function(err, results)
+		{
+			return res.send(results)
+		})
+	}
+	
+	
+
 	
 
 }
-
 
 module.exports = ContentHandler;

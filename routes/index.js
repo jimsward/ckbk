@@ -22,6 +22,8 @@ app.post('/edit', contentHandler.editRow)
 app.delete('/delete', contentHandler.deleteRow)
 app.get( '/find', contentHandler.findRow )
 app.get('/customers', sessionHandler.displayCustomersPage);
+app.get( '/accounts', contentHandler.listAccounts )
+
 console.log("HERE")
 
 app.get('/home', function(req, res, next) {

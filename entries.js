@@ -87,9 +87,50 @@ function EntriesDAO(db) {
 		
 		
 		this.findEntries =  function(obj, callback){
-			var dt = obj.date
-			console.log(dt)
-			callback(null, dt) 
+			
+			var key = obj.key,
+			val= obj.val
+			var query = {}, q1 = {}, q2 = {}
+			var deposit = 'deposit', payment ='payment'
+			//date needs to be a date object
+			
+			switch (key)
+			{
+			case 'date' :
+			var parts = val.split('/');
+			val = new Date( parts[2],parts[0]-1,parts[1] )
+			query[key] = val;			
+			break;
+			
+			case 'amount' :			
+			var re = /\,/g
+			val.replace( re, ''  )
+			val = (val * 100)
+			q1[deposit]	= val
+			q2[payment] = val
+			query = { $or : [ q1, q2 ] }//we will find the amount in payment OR deposit; returned document will say which it is
+			break;
+			
+			case  'account' :
+			query[key] = val;
+			break;
+			
+			case 'payee' :
+			query[key] = val;
+			break;
+			}
+			
+			
+			
+			entries.find( query ).toArray( function( err, items )
+			{
+				if (err) {
+				return callback(err, null)
+				}
+				console.log(items)
+				callback(null, items)
+				})
+			 
 		
 		}
 

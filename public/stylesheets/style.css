@@ -60,8 +60,18 @@ button#save { opacity :0.5; }
 
 #search-register { width : 220px; height : 42px; float:right; font-size:14px; margin: 0 0 40px 0 }
 
+fieldset { height : 140px; }
+
 fieldset label, fieldset input { display : block; }
 
 button.ui-datepicker-trigger { display:inline }
 
 div#findbtn { float:right }
+
+#resultTable caption { margin:20px; font-weight:bolder; font-size:22px; }
+
+table#resultTable tbody tr td, table#resultTable thead tr th { text-align:right }
+
+table#resultTable tbody tr:nth-child(odd) { background-color:#E8E8E8 }
+
+.wrapdiv { height:24px; width:260px; }

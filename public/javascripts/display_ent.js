@@ -1,4 +1,11 @@
 jQuery(function(){
+	
+	
+	
+	
+
+
+
 		
 	var myDate = new Date();
 	var today =(myDate.getMonth()+1) + '/' + myDate.getDate() + '/' +
@@ -6,7 +13,19 @@ jQuery(function(){
 	
 //	$( document ).tooltip();
 	
-	
+	var toDecimal = function(number)//returns a string with the (integer) number divided by 100 
+	{		
+		var str = number.toString()
+		var part1 = str.substring(0, str.length - 2)
+		if (part1.length >3)
+		{
+			
+			part1 = part1.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+					}
+		var part2 = str.substring(str.length - 2)
+		var result = part1 + '.' + part2;
+		return result
+	}
 		
 	
 			
@@ -262,6 +281,11 @@ jQuery(function(){
       width: 1040,
       modal: true,
       buttons: {  //button label : callback
+	  	Reset: function()
+		{ $( '#dialogForm' )[0].reset()
+		$( 'table#resultTable caption' ).html( '' )
+		 $( 'table#resultTable tbody tr' ).remove()
+		 },
         Find: form2,
         Cancel: function() {
           dialog.dialog( "close" );
@@ -275,17 +299,113 @@ jQuery(function(){
       }
     });//dialog
 	
-	
+	$( 'select#search' ).on( 'change', function(event){
+		var search = $( event.target ).val()
+		console.log(search)
+		$( 'table#resultTable tbody tr' ).remove()
+		 switch (search) {
+		 case 'date' :
+		 $( "#datepicker2" ).datepicker( {
+      showOn: "button",
+      buttonImage: "images/calendar.gif",
+	  showButtonPanel: true,
+      buttonImageOnly: true,
+      buttonText: "Select date",
+	  dateFormat: "m/d/yy"
+	   }  );		 
+		 break;
+		 
+		 case 'amount' :
+		 $( 'input#datepicker2.hasDatepicker' ).datepicker('destroy')	 
+		 $( 'input#datepicker2' ).maskMoney().unbind( 'click' ).trigger( 'focus' )
+		 break;
+		 
+		 case 'account' :
+		  $( '#datepicker2' ).datepicker( 'destroy' )
+		  $( 'input#datepicker2' ).maskMoney( 'destroy' )
+		 var accounts = new Array
+		 var data = {}
+		 data.key = "account"
+		 data.val = {}
+		 
+		 $.ajax( 
+		 {
+			 url : '/accounts',
+			 method : 'GET'
+		 }
+		  )
+		  .fail(function( jqXHR, textStatus, errorThrown ) {
+					alert(errorThrown)
+					})
+		  .always(function(msg)
+					{
+					$.each(msg, function(index, value){
+						accounts[index] = value.account;
+						})	
+					$( "input#datepicker2" ).autocomplete({
+  				    source: accounts})							
+					})		 
+		 break;
+		 
+		 case 'payee' :
+		 $( '#datepicker2' ).datepicker( 'destroy' )
+    	  $( 'input#datepicker2' ).maskMoney( 'destroy' )
+		 var payees = new Array;
+		 var data = {}
+		 data.key = "payee"
+		 data.val = {}
+		 $.ajax(
+		 {
+			url : '/find',
+			method : 'GET' 
+			
+		 })
+		  .fail(function( jqXHR, textStatus, errorThrown ) {
+					alert(errorThrown)
+					})
+					.always(function(msg)
+					{
+					var test
+					$.each(msg, function(index, value)
+					{
+						
+						if ( value.payee )
+						{
+							
+							test =  ( $.inArray( value.payee, payees) == -1 )
+							if (test)
+							payees.push(value.payee)
+						
+						}
+						
+						})
+						console.log(payees.length)
+					$( "input#datepicker2" ).autocomplete({
+  				    source: payees})					
+					})
+		 
+		 break;
+	 }			 
+		} )
  
    function form2()
    {
     
      console.log( 'search logic goes here' );
 	 
-	 var data = {};
-	 
-		data.date = $( "input[id|='datepicker2']" ).val()
-		alert(data.date)
+	/*Callback for the dialog form handler. Send the key (name of the field to search on)
+	and the value to the server.*/
+		
+		var data = {};
+	 	data.key = $( 'select#search option:selected' ).val()
+		console.log('key:' + ' ' + data.key)
+		
+		{data.val = $( "input[id|='datepicker2']" ).val()}
+		var tableCaption = data.key + ' : ' + data.val
+		$( 'table#resultTable caption' ).html( tableCaption )
+		
+		console.log(data.key + ' ' + data.val)
+				
 		$.ajax(
 		{
 		url : '/find',
@@ -296,10 +416,21 @@ jQuery(function(){
 		.fail(function( jqXHR, textStatus, errorThrown ) {
 					alert(errorThrown)
 					})
-		  		.always(function( msg ) {
+		  
+		  .always(function( msg ) {
 					$( '#dialogForm' )[0].reset()
-			  	alert( msg)
-				})
+					//set up the table with the documents returned from the search query
+					$.each( msg, function( index, obj )
+					{
+						var date = new Date(obj.date)
+						var rtdate = date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()
+						var amount = toDecimal( obj.payment + obj.deposit )
+						var type = obj.payment ? 'Payment' : 'Deposit';
+						var row = '<td>' + (index + 1) + '</td><td>' + rtdate + '</td><td>' + type + '</td><td>' + amount + '</td>'
+						$( '<tr/>' ).html( row ).appendTo( 'table#resultTable tbody' )
+					})
+					
+			})
 	
 	  
 	
@@ -311,20 +442,23 @@ jQuery(function(){
 	
 	$( "#datepicker2" ).datepicker( {
       showOn: "button",
-      //buttonImage: "images/calendar.gif",
+      buttonImage: "images/calendar.gif",
 	  showButtonPanel: true,
-     // buttonImageOnly: true,
+      buttonImageOnly: true,
       buttonText: "Select date",
 	  dateFormat: "m/d/yy"
 	   }  );
 	   
-	   $("input#datepicker2").on('blur', function(){
+	   $("input#datepicker2").on('change', function(){
+		   if ( $( 'select#search' ).val() == 'date' )
+		   {
         var val = $(this).val();
         var val1 = Date.parse(val);
 		    if (isNaN(val1)==true){
-			//$(this).val(today)
+			$(this).val(today)
            alert("Please enter a valid date!")
         }
+		   }
         else{
            console.log(val1);
         }

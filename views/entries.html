@@ -90,10 +90,12 @@ You are not logged in!        <a href="/login">Login</a> | <a href="/signup">Sig
       <label for="search">Search</label>
       <select id="search" name="search"><option value="date">date</option><option value="amount">amount</option><option value="account">account</option><option value="payee">payee</option></select>
       <label for="find">Find</label>
-      <!--<select id="find" name="find"></select>-->
+     
+      <div class="wrapdiv">
       <input type="text" id="datepicker2" name="date" >
-      <label for="match">Match</label>
-      <select id="match" name="match"></select>
+      </div>
+     <!-- <label for="match">Match</label>
+      <select id="match" name="match"></select>-->
  
       <!-- Allow form submission with keyboard without duplicating the dialog button -->
       <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
@@ -101,6 +103,18 @@ You are not logged in!        <a href="/login">Login</a> | <a href="/signup">Sig
        
     </fieldset>
   </form>
+  
+  <table id="resultTable">
+  <caption></caption>
+  <thead>
+  <tr>
+  <th>#</th><th>Date</th><th>Type</th><th>Amount</th>
+  </tr>
+  </thead>
+  <tbody
+  </tbody>
+  </table>
+  
 </div>
 
 
