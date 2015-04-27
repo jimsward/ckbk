@@ -1,6 +1,9 @@
  var qs = require('querystring');
 var EntriesDAO = require('../entries').EntriesDAO
 var AccountsDAO = require('../accounts').AccountsDAO
+var toDecimal = require('../public/javascripts/toDecimal')
+var toInt = require('../public/javascripts/toInt')
+
   //, sanitize = require('validator').sanitize; // Helper to sanitize form input
 
 /* The ContentHandler must be constructed with a connected db */
@@ -10,20 +13,7 @@ function ContentHandler (app, db) {
     var entries = new EntriesDAO(db);
 	var accounts = new AccountsDAO(db);
 	
-	var toDecimal = function(number)//returns a string with the (integer) number divided by 100 
-	{		
-		var str = number.toString()
-		var part1 = str.substring(0, str.length - 2)
-		if (part1.length >3)
-		{
-			
-			part1 = part1.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-					}
-		var part2 = str.substring(str.length - 2)
-		var result = part1 + '.' + part2;
-		return result
-	}
-	
+
 
     this.displayMainPage = function(req, res, next) {
         "use strict";
@@ -71,20 +61,8 @@ function ContentHandler (app, db) {
 		
 		console.dir(req.body)
 		var newE = req.body;  //need to store dollar amounts as integers
-		var decArr = new Array
-		var thouArr = new Array
-		var dotFree
-		decArr = newE.deposit.split('.')
-		dotFree = decArr[0] + decArr[1]	
-		
-		var re = /\,/g
-		dotFree = dotFree.replace( re, '' )
-		newE.deposit = parseInt(dotFree)
-		
-		decArr = newE.payment.split('.')
-		dotFree = decArr[0] + decArr[1]
-		dotFree = dotFree.replace( re, '' )
-		newE.payment = parseInt(dotFree)
+		newE.deposit = toInt( newE.deposit )
+		newE.payment = toInt( newE.payment )
 		
 		//date needs to be a date object
 		var parts = newE.date.split('/');
@@ -92,24 +70,20 @@ function ContentHandler (app, db) {
 		
 			entries.insertEntry( newE, function(err) {
             "use strict";
-
             if (err) return next(err);
 
             entries.getEntries(function(err, results) {	
-			
-            "use strict";
+			 "use strict";
 			 if (err) return next(err);
-			
+			 
+			//to reduce clutter, no display of zero amounts
 			for ( var i = 0; i < results.length; i++ )
 			{ 
 			if ( results[i].deposit== 0 ) results[i].deposit = "";
 			if ( results[i].payment == 0 ) results[i].payment = "";
 			}
 			
-			var entry = { "items" : results }
-			
-			
-			
+			var entry = { "items" : results }			
             return res.render('entries', entry );
         });			
 		})
@@ -123,15 +97,19 @@ function ContentHandler (app, db) {
 		var itemsOffset = req.body.id		
 		var arrIndex =  itemsOffset - itemsStart		
 		var obj = app.locals.entry.items[arrIndex]
+		
+		
+		
+		
+		//amount sent is a string with decimal, commas - fix it
 		var re = /\,/g
 		obj.deposit = req.body.deposit.replace( re, ''  )
+				console.log(typeof obj.deposit)
+
 		obj.payment = req.body.payment.replace( re, ''  )
-		
-		console.log( obj.deposit + ' ' + obj.payment )
-		//amount sent is a string with decimal, commas - fix it
 		obj.deposit = (obj.deposit*100)
 		obj.payment = (obj.payment*100)
-		console.log(obj)
+		
 		entries.updateEntry( obj, function(err, results)
 		{
 		if (err) return next(err)		
@@ -181,6 +159,14 @@ function ContentHandler (app, db) {
 	}
 	
 	
+	this.editResults = function( req, res, next )//req has object from search dialog
+	{
+		var results = req.query
+		console.log('results:' + results.deposit)
+		res.render( 'edit_search_results', results, function(err, html) {
+  res.send(html);})
+		
+	}
 
 	
 

@@ -134,7 +134,8 @@ function EntriesDAO(db) {
 		
 		}
 
-   
+
+		
 }
 
 module.exports.EntriesDAO = EntriesDAO;

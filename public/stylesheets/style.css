@@ -47,6 +47,9 @@ input#datepicker.hasDatepicker { width : 80px; margin-left:2px; padding-left:4px
 
 input#editdeposit, input#editpayment { width : 66px }
 
+#resultsForm input[type="text"], #resultsForm label { width : 300px; height : 40px; display:block; font-size:24px; background-color:#dddddd }
+
+ #resultsForm label { display : inline; background-color:white }
 
 dvi#ui-datepicker-div { width:150px; height:122px }
 

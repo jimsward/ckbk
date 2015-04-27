@@ -13,7 +13,7 @@
 <script>
 
 var toDecimal = function(number)//returns a string with the (integer) number divided by 100 
-	{		
+	{							//and commas thus: ###,###,###,###.##
 		var str = number.toString()
 		var part1 = str.substring(0, str.length - 2)
 		if (part1.length >3)
@@ -27,7 +27,7 @@ var toDecimal = function(number)//returns a string with the (integer) number div
 
 	}
 	$(function(){
-		var formatted = toDecimal(123456789)
+		var formatted = toDecimal(123456789012345)
 		$( '#display' ).html(formatted)
 		})
 	

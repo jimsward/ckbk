@@ -23,7 +23,7 @@ app.delete('/delete', contentHandler.deleteRow)
 app.get( '/find', contentHandler.findRow )
 app.get('/customers', sessionHandler.displayCustomersPage);
 app.get( '/accounts', contentHandler.listAccounts )
-
+app.get( '/results', contentHandler.editResults )
 console.log("HERE")
 
 app.get('/home', function(req, res, next) {

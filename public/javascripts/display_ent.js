@@ -283,6 +283,7 @@ jQuery(function(){
       buttons: {  //button label : callback
 	  	Reset: function()
 		{ $( '#dialogForm' )[0].reset()
+		$( 'input#datepicker2' ).maskMoney( 'destroy' )
 		$( 'table#resultTable caption' ).html( '' )
 		 $( 'table#resultTable tbody tr' ).remove()
 		 },
@@ -304,7 +305,10 @@ jQuery(function(){
 		console.log(search)
 		$( 'table#resultTable tbody tr' ).remove()
 		 switch (search) {
+			 
+			 
 		 case 'date' :
+		  
 		 $( "#datepicker2" ).datepicker( {
       showOn: "button",
       buttonImage: "images/calendar.gif",
@@ -427,9 +431,35 @@ jQuery(function(){
 						var amount = toDecimal( obj.payment + obj.deposit )
 						var type = obj.payment ? 'Payment' : 'Deposit';
 						var row = '<td>' + (index + 1) + '</td><td>' + rtdate + '</td><td>' + type + '</td><td>' + amount + '</td>'
-						$( '<tr/>' ).html( row ).appendTo( 'table#resultTable tbody' )
+						$( '<tr/>' ).attr( 'id', index ).html( row ).appendTo( 'table#resultTable tbody' )
 					})
 					
+				$( '#resultTable tr td' ).on( 'click', function(event)
+				{
+					var target = $( event.target );
+					var parentId = target.parent().attr( 'id' )
+					var data = msg[parentId]
+					$.ajax(
+					{
+					url : '/results',
+					method : 'GET',
+					data : data,
+					context: document.body
+					}
+					)
+					.fail(function( jqXHR, textStatus, errorThrown ) {
+					alert(errorThrown)
+					})
+					.always(function(msg)
+					{
+						$( '.container' ).html('')
+						$( '.container' ).html(msg)
+						
+						})
+					
+					console.log('send : ' + msg[parentId].deposit)
+					
+					})	
 			})
 	
 	  
